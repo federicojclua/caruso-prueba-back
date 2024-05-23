@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const userRouter = require('./routes/userRouter');
 const connectDB = require('./config/db');
 const authRouter = require('./routes/authRouter');
+const canchasRoutes = require('./routes/canchas');
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ const port = process.env.PORT;
 app.use('/', userRouter)
 
 app.use('/api/auth', authRouter)
-
+app.use('/api/sucursales', canchasRoutes);
 
 connectDB();
 
