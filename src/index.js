@@ -1,31 +1,34 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const userRouter = require('./routes/userRouter');
-const connectDB = require('./config/db');
 const authRouter = require('./routes/authRouter');
 const canchasRoutes = require('./routes/canchas');
 
 dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 5001;
 
 app.use(morgan('combined'));
-
 app.use(express.json());
 
-const port = process.env.PORT;
+// Conexión a MongoDB usando la cadena de conexión del archivo .env
+const mongoURI = process.env.MONGO_DB;
 
-//routes
-app.use('/', userRouter)
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB conectado exitosamente'))
+.catch((err) => console.error('Error al conectar a MongoDB:', err));
 
-app.use('/api/auth', authRouter)
+// Rutas
+app.use('/', userRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/sucursales', canchasRoutes);
 
-connectDB();
-
-app.listen(port, ()=>{
-    console.log('app corriendo en el puerto: ', port);
-})
-
-
+app.listen(port, () => {
+    console.log('App corriendo en el puerto:', port);
+});
