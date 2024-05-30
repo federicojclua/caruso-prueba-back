@@ -6,7 +6,7 @@ const cors = require('cors');
 const userRouter = require('./routes/userRouter');
 const authRouter = require('./routes/authRouter');
 const canchasRoutes = require('./routes/canchas');
-
+//const sucursales = require('./routes/sucursalesRouter');
 dotenv.config();
 
 const app = express();
@@ -37,6 +37,7 @@ mongoose.connect(mongoURI, {
 app.use('/', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/sucursales', canchasRoutes);
+//app.use('/api/sucursales', sucursalesRouter);
 
 app.listen(port, () => {
     console.log('App corriendo en el puerto:', port);
