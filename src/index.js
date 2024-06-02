@@ -6,11 +6,16 @@ const cors = require('cors');
 const userRouter = require('./routes/userRouter');
 const authRouter = require('./routes/authRouter');
 const canchasRoutes = require('./routes/canchas');
-
+//conectar reserva de canchas back con front
+const http = require('http');
+/* const socketIo = require('socket.io');
+const server = http.createServer(app);
+const io = socketIo(server);
+*/
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5004;
+const port = process.env.PORT || 5000;
 
 app.use(morgan('combined'));
 app.use(express.json());
@@ -21,12 +26,12 @@ app.use(cors({
     credentials: true, // Permitir cookies y cabeceras de autenticación
 }));
 
-// Conexión a MongoDB usando la cadena de conexión del archivo .env
 
 // Conexión a MongoDB usando la cadena de conexión del archivo .env
 const mongoURI = process.env.MONGO_DB;
 
 mongoose.connect(mongoURI, {
+    ssl: true,               // Habilitar SSL
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })

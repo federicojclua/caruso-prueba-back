@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const { generateJwt } = require('../libs/jwt');
+const { response } = require('express');
 
 const register = async (req, res) => {
     try {
@@ -10,7 +11,7 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = new User({
-            nombre,
+            nombre, 
             apellido,
             dni,
             equipo,
@@ -20,6 +21,15 @@ const register = async (req, res) => {
         });
 
         await newUser.save();
+        const token = await generateJwt(newUser); // generamos el token con el usuario recien creado
+        res.cookie("token", token); 
+
+        // respuesta de datos del usuario para utilizar en el front
+        res.json({
+            nombre: newUser.nombre,
+            dni: newUser.dni,
+            email: newUser.email,
+        })
 
         newUser.password = undefined;
 
@@ -46,10 +56,18 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(401).json({ message: 'contraseña incorrecta' });
+            return res.status(401).json({ message: 'email o contraseña incorrecta' });
         }
 
         const token = generateJwt({ id: user._id, email: user.email });
+
+        res.cookie("token", token); // guardamos el token en las cookies
+
+        // respuesta de datos del usuario para utilizar en el front
+        res.json({
+            nombre: user.nombre,
+            email: user.email,
+        })
 
         res.status(201).json({ message: 'logueo exitoso', user: user, token: token });
     } catch (error) {
@@ -57,7 +75,15 @@ const login = async (req, res) => {
     }
 };
 
+const logout = (req, res) =>{
+    res.cookie('token', "", {
+        expires: new Date(0)
+    });
+    return res.redirect('/') // REDIRECCIONA AL INDEX
+};
+
 module.exports = {
     register,
-    login
+    login,
+    logout,
 };

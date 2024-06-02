@@ -6,14 +6,23 @@ const CanchaSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    tamanio: {
+        type: String, 
+        enum: ['3', '5', '9'], 
+        required: true,
+    },
     sucursal: {
         type: String,
         required: true,
-    },
+    }, // capaz que no sea necesario este argumento
     disponible: {
         type: Boolean,
         default: true,
     },
+    reservas: [{
+        inicio: { type: Date, required: true },
+        fin: { type: Date, required: true }
+        }],
 });
 
 const Cancha = mongoose.model('Cancha', CanchaSchema);

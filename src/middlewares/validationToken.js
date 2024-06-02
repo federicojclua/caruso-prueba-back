@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const validateToken = (req, res, next) => {
 
     try {
-        const token = req.headers.authorization;
+        const token = req.cookies.get('token'); // recuperar el token 
 
         if (!token) {
             return res.status(401).json({ message: 'acceso denegado, token requerido' });
