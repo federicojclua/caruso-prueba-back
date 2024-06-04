@@ -83,6 +83,4 @@ const reservarTodasCanchas = async (req, res) => {
 
 module.exports = {
 	obtenerCanchasDisponibles,
-	reservarCancha,
-	reservarTodasCanchas
 };
