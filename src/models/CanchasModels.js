@@ -14,7 +14,7 @@ const CanchaSchema = new mongoose.Schema({
     sucursal: {
         type: String,
         required: true,
-    }, // capaz que no sea necesario este argumento
+    }, 
     disponible: {
         type: Boolean,
         default: true,

@@ -21,19 +21,17 @@ const register = async (req, res) => {
         });
 
         await newUser.save();
-        const token = await generateJwt(newUser); // generamos el token con el usuario recien creado
+        const token = generateJwt({ id: newUser._id, email: newUser.email });
         res.cookie("token", token); 
 
-        // respuesta de datos del usuario para utilizar en el front
-        res.json({
-            nombre: newUser.nombre,
-            dni: newUser.dni,
-            email: newUser.email,
-        })
-
-        newUser.password = undefined;
-
-        res.status(201).json({ message: 'Usuario registrado exitosamente', user: email });
+        res.status(201).json({
+            message: 'Usuario registrado exitosamente',
+            user: {
+                nombre: newUser.nombre,
+                dni: newUser.dni,
+                email: newUser.email
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error al crear el usuario' });
     }
@@ -61,17 +59,20 @@ const login = async (req, res) => {
 
         const token = generateJwt({ id: user._id, email: user.email });
 
-        res.cookie("token", token); // guardamos el token en las cookies
+        res.cookie("token", token); // token en cookies
 
-        // respuesta de datos del usuario para utilizar en el front
-        res.json({
+        res.status(201).json({ 
+            message: 'logueo exitoso', 
+            user:{
             nombre: user.nombre,
-            email: user.email,
-        })
-
-        res.status(201).json({ message: 'logueo exitoso', user: user, token: token });
+            email: user.email
+        },
+        token: token
+    });
     } catch (error) {
-        res.status(500).json({ message: 'error en login de usuario' });
+        res.status(500).json({
+            message: 'error en login de usuario'
+        });
     }
 };
 
