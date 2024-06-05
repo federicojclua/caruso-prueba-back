@@ -1,4 +1,3 @@
-// controllers/ReservaController.js
 
 const Reserva = require('../models/Reserva');
 const Cancha = require('../models/Cancha');
@@ -16,14 +15,16 @@ exports.createReserva = async (req, res) => {
       return res.status(400).json({ error: 'No hay suficientes canchas disponibles' });
     }
 
-    const reserva = new Reserva({
-      usuario,
-      canchas,
-      fecha
-    });
-
-    await reserva.save();
-    res.status(201).json(reserva);
+    const reservas = await Promise.all(canchasDisponibles.map(async (cancha) => {
+      const reserva = new Reserva({
+          usuario,
+          cancha: cancha._id,
+          fecha
+      });
+      return await reserva.save();
+  }));
+  
+    res.status(201).json(reservas);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
