@@ -4,10 +4,10 @@ const validateProduct = require('../middlewares/validateProduct');
 
 const router = express.Router();
 
-router.post('/api/products', validateProduct, productController.createProduct);
-router.get('/api/products', productController.getAllProducts);
-router.get('/api/products/:id', productController.getProductById);
-router.put('/api/products/:id', validateProduct, productController.updateProductById);
-router.delete('/api/products/:id', productController.deleteProductById);
+router.post('/', validateProduct, productController.createProduct);
+router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
+router.put('/:id', validateProduct, productController.updateProductById);
+router.delete('/:id', productController.deleteProductById);
 
 module.exports = router;

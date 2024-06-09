@@ -60,7 +60,7 @@ app.use('/api/usuarios', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/sucursales', canchasRoutes);
 app.use('/api/reservas', reservaRoutes);
-app.use('/api/productos', productRouter);
+app.use('/api/products', productRouter);
 
 app.listen(port, () => {
     console.log('App corriendo en el puerto:', port);
