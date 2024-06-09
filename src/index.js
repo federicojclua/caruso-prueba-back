@@ -10,6 +10,7 @@ const canchasRoutes = require('./routes/canchasRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
 const reservasAdminRouter = require('./routes/reservasAdminRouter');
 const bodyParser = require('body-parser');
+const productRouter = require('./routes/productRouter');
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/sucursales', canchasRoutes);
 app.use('/api/reservas', reservaRoutes);
 app.use('/api/reservas/admin', reservasAdminRouter);
+app.use('/api/products', productRouter);
 
 app.listen(port, () => {
   console.log('App corriendo en el puerto:', port);

@@ -10,10 +10,10 @@ const router = express.Router();
 router.use(authMiddleware);
 
 // Rutas para reservas (público y admin)
-router.get('/', reservasController.obtenerReservas);  // Asegúrate de que esta función exista en tu controlador
-router.post('/', reservasController.crearReserva);  // Verifica esta función también
-router.get('/:id', reservasController.obtenerReservaPorId);  // Y esta
-router.put('/:id', reservasController.actualizarReserva);  // Y esta
-router.delete('/:id', reservasController.eliminarReserva);  // Y esta
+router.get('/', reservasController.obtenerReservas);  
+router.post('/', reservasController.crearReserva);  
+router.get('/:id', reservasController.obtenerReservaPorId);  
+router.put('/:id', reservasController.actualizarReserva);
+router.delete('/:id', reservasController.eliminarReserva); 
 
 module.exports = router;

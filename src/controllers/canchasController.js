@@ -1,16 +1,4 @@
-// src/controllers/canchasController.js
-
-const Cancha = require('../models/canchasModels'); // Asegúrate de que coincide con el nombre del archivo
- // Asegúrate de que coincide con el nombre del archivo
-
-// Controladores de Canchas aquí...
-
-module.exports = {
-    // Exporta tus controladores aquí
-};
-
-
-
+const Cancha = require('../models/canchasModels'); 
 
 const obtenerCanchasDisponibles = async (req, res) => {
     const { sucursal } = req.params;
@@ -24,9 +12,10 @@ const obtenerCanchasDisponibles = async (req, res) => {
 
 // Otros controladores para crear, actualizar y eliminar canchas
 const crearCancha = async (req, res) => {
-    const { nombre, sucursal, disponible } = req.body;
+    const { nombre, tamanio, sucursal, disponible } = req.body;
     const nuevaCancha = new Cancha({
         nombre,
+        tamanio,
         sucursal,
         disponible
     });
