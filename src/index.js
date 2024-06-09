@@ -6,12 +6,11 @@ const cors = require('cors');
 const userRouter = require('./routes/userRouter');
 const authRouter = require('./routes/authRouter');
 const canchasRoutes = require('./routes/canchas');
+const productRouter = require('./routes/productRouter');
+
 //conectar reserva de canchas back con front
 const http = require('http');
-/* const socketIo = require('socket.io');
-const server = http.createServer(app);
-const io = socketIo(server);
-*/
+
 dotenv.config();
 
 const app = express();
@@ -42,6 +41,7 @@ mongoose.connect(mongoURI, {
 app.use('/', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/sucursales', canchasRoutes);
+app.use('/', productRouter);
 
 app.listen(port, () => {
     console.log('App corriendo en el puerto:', port);
