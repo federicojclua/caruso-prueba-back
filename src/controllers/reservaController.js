@@ -1,6 +1,6 @@
 
-const Reserva = require('../models/Reserva');
-const Cancha = require('../models/Cancha');
+const Reserva = require('../models/ReservaModel');
+const Cancha = require('../models/CanchasModels');
 
 exports.createReserva = async (req, res) => {
   try {
