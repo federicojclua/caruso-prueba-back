@@ -10,14 +10,14 @@ const validateToken = require('../middlewares/validationToken');
 
 const userRouter = express.Router();
 
-userRouter.get('/api/users', getAllUsers);
+userRouter.get('/api/usuarios', getAllUsers);
 
-userRouter.post('/api/users', validateToken, createUser);
+userRouter.post('/api/usuarios', validateToken, createUser);
 
-userRouter.get('/api/users/:id', validateToken, getUserById);
+userRouter.get('/api/usuarios/:id', validateToken, getUserById);
 
-userRouter.patch('/api/users/:id', updateUser);
+userRouter.patch('/api/usuarios/:id', updateUser);
 
-userRouter.delete('/api/users/:id', deleteUser);
+userRouter.delete('/api/usuarios/:id', deleteUser);
 
 module.exports = userRouter;
