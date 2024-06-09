@@ -1,17 +1,26 @@
+// src/models/userModel.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    nombre: { type: String, required: true },
-    apellido: { type: String, required: true },
-    dni: { type: String, required: true, unique: true },
-    equipo: { type: String },
-    direccion: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, minLength: 7},
-    isActive: { type: Boolean, default: true },
-    isAdmin: { type: Boolean, default: false },
-    role: { type: String, default: 'USER' },
-}, { timestamps: true });
+  nombre: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
+  },
+});
 
 const User = mongoose.model('User', userSchema);
 

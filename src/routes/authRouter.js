@@ -1,16 +1,14 @@
+// src/routes/authRouter.js
 const express = require('express');
+const { register, login, logout, registerAdmin } = require('../controllers/authController');
 
-const authController = require('../controllers/authController');
+const router = express.Router();
 
-//CONTROL
-console.log('authController:', authController); 
+router.post('/register', register);
+router.post('/login', login);
+router.post('/logout', logout);
 
-const authRouter = express.Router();
+// Ruta para registrar un administrador
+router.post('/register-admin', registerAdmin);
 
-authRouter.post('/register', authController.register);
-
-authRouter.post('/login', authController.login);
-
-authRouter.post('/logout', authController.logout);
-
-module.exports = authRouter ;
+module.exports = router;

@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const { generateJwt } = require('../libs/jwt');
 const { response } = require('express');
+const jwt = require('jsonwebtoken');
+
 
 const register = async (req, res) => {
     try {
@@ -37,6 +39,40 @@ const register = async (req, res) => {
     }
 };
 
+// Registro de un usuario administrador
+const registerAdmin = async (req, res) => {
+    try {
+      const { nombre, email, password } = req.body;
+  
+      // Verificar si el usuario ya existe
+      let user = await User.findOne({ email });
+      if (user) {
+        return res.status(400).json({ message: 'El usuario ya existe' });
+      }
+  
+      user = new User({
+        nombre,
+        email,
+        password: await bcrypt.hash(password, 10),
+        role: 'admin',
+      });
+  
+      await user.save();
+  
+      // Generar un token
+      const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+        expiresIn: '1d',
+      });
+  
+      res.status(201).json({ token });
+    } catch (error) {
+        console.error('Error al registrar el administrador:', error);
+        res.status(500).json({ message: 'Error al registrar el administrador', error });
+      }
+      
+  };
+
+  
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -85,6 +121,7 @@ const logout = (req, res) =>{
 
 module.exports = {
     register,
+    registerAdmin,
     login,
     logout,
 };
