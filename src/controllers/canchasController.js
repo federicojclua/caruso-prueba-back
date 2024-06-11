@@ -12,10 +12,9 @@ const obtenerCanchasDisponibles = async (req, res) => {
 
 // Otros controladores para crear, actualizar y eliminar canchas
 const crearCancha = async (req, res) => {
-    const { nombre, tamanio, sucursal, disponible } = req.body;
+    const { nombre, sucursal, disponible } = req.body;
     const nuevaCancha = new Cancha({
         nombre,
-        tamanio,
         sucursal,
         disponible
     });
