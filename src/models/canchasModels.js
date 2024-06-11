@@ -6,11 +6,7 @@ const CanchaSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    tamanio: {
-        type: String, 
-        enum: ['5', '7', '9'], 
-        required: true,
-    },
+
     sucursal: {
         type: String,
         required: true,
