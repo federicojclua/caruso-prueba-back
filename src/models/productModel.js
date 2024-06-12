@@ -16,7 +16,11 @@ const productSchema = new mongoose.Schema({
     quantity: {
         type: Number,
         required: true
-    }
+    },
+    image: {
+        type: String,
+        required: false
+    },
 });
 
 const Product = mongoose.model('Product', productSchema);
