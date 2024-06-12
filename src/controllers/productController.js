@@ -1,4 +1,4 @@
-const Product = require('../models/productModel');
+const Product = require("../models/productModel");
 
 exports.createProduct = async (req, res) => {
     try {
@@ -33,7 +33,10 @@ exports.getProductById = async (req, res) => {
 
 exports.updateProductById = async (req, res) => {
     try {
-        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        });
         if (!product) {
             return res.status(404).send();
         }
@@ -50,6 +53,19 @@ exports.deleteProductById = async (req, res) => {
             return res.status(404).send();
         }
         res.status(200).send(product);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+exports.uploadImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send({ message: "No hay un archivo cargado" });
+        }
+
+        const imagePath = `/uploads/${req.file.filename}`;
+        res.status(201).send({ url: imagePath });
     } catch (error) {
         res.status(500).send(error);
     }
