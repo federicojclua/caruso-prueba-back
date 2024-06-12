@@ -1,9 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/userModel');
 const { generateJwt } = require('../libs/jwt');
-const { response } = require('express');
 const jwt = require('jsonwebtoken');
-
 
 const register = async (req, res) => {
     try {
@@ -23,7 +21,7 @@ const register = async (req, res) => {
         });
 
         await newUser.save();
-        const token = generateJwt({ id: newUser._id, email: newUser.email });
+        const token = await generateJwt({ id: newUser._id, email: newUser.email });
         res.cookie("token", token); 
 
         res.status(201).json({
@@ -32,91 +30,97 @@ const register = async (req, res) => {
                 nombre: newUser.nombre,
                 dni: newUser.dni,
                 email: newUser.email
-            }
+            },
+            token: token
         });
     } catch (error) {
+        console.error('Error al registrar el usuario:', error);
         res.status(500).json({ message: 'Error al crear el usuario' });
     }
 };
 
-// Registro de un usuario administrador
 const registerAdmin = async (req, res) => {
     try {
-      const { nombre, email, password } = req.body;
-  
-      // Verificar si el usuario ya existe
-      let user = await User.findOne({ email });
-      if (user) {
-        return res.status(400).json({ message: 'El usuario ya existe' });
-      }
-  
-      user = new User({
-        nombre,
-        email,
-        password: await bcrypt.hash(password, 10),
-        role: 'admin',
-      });
-  
-      await user.save();
-  
-      // Generar un token
-      const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-        expiresIn: '1d',
-      });
-  
-      res.status(201).json({ token });
+        const { nombre, email, password } = req.body;
+
+        let user = await User.findOne({ email });
+        if (user) {
+            return res.status(400).json({ message: 'El usuario ya existe' });
+        }
+
+        user = new User({
+            nombre,
+            email,
+            password: await bcrypt.hash(password, 10),
+            role: 'admin',
+        });
+
+        await user.save();
+
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+            expiresIn: '1d',
+        });
+
+        res.status(201).json({ token });
     } catch (error) {
         console.error('Error al registrar el administrador:', error);
         res.status(500).json({ message: 'Error al registrar el administrador', error });
-      }
-      
-  };
+    }
+};
 
-  
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log('Email:', email, 'Password:', password);
 
         if (!email || !password) {
-            return res.status(404).json({ message: 'NO ENVIASTE EL EMAIL o PASSWORD, para el logueo es requerido' });
+            console.log('Faltan email o contraseña');
+            return res.status(404).json({ message: 'No enviaste el email o password, para el logueo es requerido' });
         }
 
         const user = await User.findOne({ email });
+        console.log('Usuario encontrado:', user);
 
         if (!user) {
-            return res.status(401).json({ message: 'usuario no encontrado' });
+            console.log('Usuario no encontrado');
+            return res.status(401).json({ message: 'Usuario no encontrado' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+        console.log('Contraseña coincide:', isMatch);
 
         if (!isMatch) {
-            return res.status(401).json({ message: 'email o contraseña incorrecta' });
+            console.log('Email o contraseña incorrecta');
+            return res.status(401).json({ message: 'Email o contraseña incorrecta' });
         }
 
-        const token = generateJwt({ id: user._id, email: user.email });
+        const token = await generateJwt({ id: user._id, email: user.email });
+        console.log('Token generado:', token);
 
-        res.cookie("token", token); // token en cookies
+        res.cookie("token", token);
 
         res.status(201).json({ 
-            message: 'logueo exitoso', 
-            user:{
-            nombre: user.nombre,
-            email: user.email
-        },
-        token: token
-    });
+            message: 'Logueo exitoso', 
+            user: {
+                nombre: user.nombre,
+                email: user.email,
+                role: user.role
+            },
+            token: token
+        });
     } catch (error) {
+        console.error('Error en login de usuario:', error);
         res.status(500).json({
-            message: 'error en login de usuario'
+            message: 'Error en login de usuario'
         });
     }
 };
 
-const logout = (req, res) =>{
+const logout = (req, res) => {
     res.cookie('token', "", {
         expires: new Date(0)
     });
-    return res.redirect('/') // REDIRECCIONA AL INDEX
+    return res.redirect('/');
 };
 
 module.exports = {
