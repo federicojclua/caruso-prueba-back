@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Cancha = require('./models/Cancha');
-
+const FRONTEND_URL = 'https://caruso-futbol-club-1.onrender.com';
 dotenv.config();
 
 const canchas = [
