@@ -10,11 +10,15 @@ const canchasRoutes = require('./routes/canchasRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
 const reservasAdminRouter = require('./routes/reservasAdminRouter');
 const bodyParser = require('body-parser');
+<<<<<<< HEAD
 
 const productRouter = require('./routes/productRouter'); 
 
 
 
+=======
+const productRouter = require('./routes/productRouter'); 
+>>>>>>> 8f0b2590fb28af7bf8f18670b3e696122dbc35d8
 
 dotenv.config();
 
