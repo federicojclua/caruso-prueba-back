@@ -2,7 +2,6 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const userRouter = require('./routes/userRouter');
 const authRouter = require('./routes/authRouter');
@@ -11,6 +10,8 @@ const reservaRoutes = require('./routes/reservaRoutes');
 const reservasAdminRouter = require('./routes/reservasAdminRouter');
 const bodyParser = require('body-parser');
 const productRouter = require('./routes/productRouter');
+const connectDB = require('./config/db.js');
+const fileUpload = require('express-fileupload');
 
 dotenv.config();
 
@@ -34,11 +35,7 @@ app.use(cors({
   credentials: true,
 }));
 
-const mongoURI = process.env.MONGO_DB;
-
-mongoose.connect(mongoURI)
-  .then(() => console.log('MongoDB conectado exitosamente'))
-  .catch((err) => console.error('Error al conectar a MongoDB:', err));
+connectDB();
 
 app.use('/api/usuarios', userRouter);
 app.use('/api/auth', authRouter);
@@ -46,6 +43,12 @@ app.use('/api/sucursales', canchasRoutes);
 app.use('/api/reservas', reservaRoutes);
 app.use('/api/reservas/admin', reservasAdminRouter);
 app.use('/api/products', productRouter);
+
+
+app.use(fileUpload({
+  useTempFiles : true,
+  tempFileDir : './uploads/'
+}));
 
 app.listen(port, () => {
   console.log('App corriendo en el puerto:', port);
