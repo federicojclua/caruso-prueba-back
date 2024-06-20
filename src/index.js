@@ -11,7 +11,7 @@ const reservaRoutes = require('./routes/reservaRoutes');
 const reservasAdminRouter = require('./routes/reservasAdminRouter');
 const bodyParser = require('body-parser');
 
-const productRouter = require('./routes/productRouter'); // prueba render
+const productRouter = require('./routes/productRouter'); 
 
 
 dotenv.config();
