@@ -40,7 +40,7 @@ mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB conectado exitosamente'))
   .catch((err) => console.error('Error al conectar a MongoDB:', err));
 
-  // Configuración de CORS
+  // Configuración de CORS // prueba render
 app.use(cors({
   origin: 'https://caruso-futbol-club-1.onrender.com'
 }));
