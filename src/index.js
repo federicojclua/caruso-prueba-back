@@ -38,25 +38,20 @@ app.use(cors({
   credentials: true,
 }));
 
-<<<<<<< HEAD
+
   // Configuración de CORS 
   app.use(cors({
     origin: 'https://caruso-futbol-club-1.onrender.com'
   }));
 
-=======
->>>>>>> d75c88b2679d93b175884c7f018f1825611afe94
+
 const mongoURI = process.env.MONGO_DB;
 
 mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB conectado exitosamente'))
   .catch((err) => console.error('Error al conectar a MongoDB:', err));
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> d75c88b2679d93b175884c7f018f1825611afe94
 app.use('/api/usuarios', userRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/sucursales', canchasRoutes);
