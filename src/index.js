@@ -10,11 +10,11 @@ const canchasRoutes = require('./routes/canchasRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
 const reservasAdminRouter = require('./routes/reservasAdminRouter');
 const bodyParser = require('body-parser');
-<<<<<<< HEAD
+
 const productRouter = require('./routes/productRouter'); 
-=======
-const productRouter = require('./routes/productRouter'); // prueba render
->>>>>>> d75c88b2679d93b175884c7f018f1825611afe94
+
+
+
 
 dotenv.config();
 
@@ -41,7 +41,7 @@ app.use(cors({
 
   // Configuración de CORS 
   app.use(cors({
-    origin: 'https://caruso-futbol-club-1.onrender.com'
+    origin: 'https://caruso-futbol-club-1.onrender.com',
   }));
 
 
