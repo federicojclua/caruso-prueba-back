@@ -54,6 +54,20 @@ app.use('/api/reservas', reservaRoutes);
 app.use('/api/reservas/admin', reservasAdminRouter);
 app.use('/api/products', productRouter);
 
+app.post('/webhook', (req, res) => {
+  const secret = process.env.WEBHOOK_SECRET;
+  const sig = `sha256=${crypto.createHmac('sha256', secret).update(JSON.stringify(req.body)).digest('hex')}`;
+
+  const isValid = req.headers['x-hub-signature-256'] === sig;
+
+  if (!isValid) {
+    return res.status(401).send('Invalid signature');
+  }
+
+  console.log('Webhook received:', req.body);
+  res.status(200).send('Webhook received');
+});
+
 app.listen(port, () => {
   console.log('App corriendo en el puerto:', port);
 });
