@@ -1,7 +1,6 @@
 const Product = require("../models/productModel");
 const uploadImage = require("../libs/cloudinary");
 
-
 async function getAllProducts(req, res) {
 	try {
 		const products = await Product.find({});
@@ -10,29 +9,59 @@ async function getAllProducts(req, res) {
 		res.status(500).send(error);
 	}
 };
+
 async function createProduct(req, res) {
 	try {
-		const { name, description, price, quantity, image } = req.body;
-    console.log(`files: ${req.file}`);
-		const product = new Product({ 
-      name,
-      description, 
-      price, 
-      quantity,
-      image
-    });
+		const { name, description, price, quantity } = req.body;
 
-    console.log(product);
+		if (!name) {
+			return res.status(400).json({
+				message: 'El campo Nombre es necesario',
+			});
+		}
 
-		if (req.files?.image) {
+		if (!description) {
+			return res.status(400).json({
+				message: 'El campo Descripcion es necesario'
+			});
+		}
+
+		if (!price) {
+			return res.status(400).json({
+				message: 'El campo Precio es necesario'
+			});
+		}
+
+		if (!quantity) {
+			return res.status(400).json({
+				message: 'El campo Cantidad es necesario'
+			});
+		}
+
+		let image = null;
+		if (req.files && req.files.image) {
 			const result = await uploadImage(req.files.image.tempFilePath);
-      console.log(`result: ${result}`);
-    }
-    
-    await product.save();
-		res.status(201).send(product);
+			image = result.secure_url;
+      console.log(image);
+		}
+
+		const newProduct = new Product({
+			name,
+			description,
+			price,
+			quantity,
+			image
+		});
+
+		await newProduct.save();
+
+		res.status(201).send({
+			message: 'Producto creado exitosamente',
+			product: newProduct
+		});
 	} catch (error) {
 		res.status(400).send(error);
+		console.log(error);
 	}
 };
 
@@ -41,30 +70,30 @@ async function getProductById(req, res) {
 		const product = await Product.findById(req.params.id);
 		if (!product) {
 			return res.status(404).send({
-        message: 'Producto no encontrado'
-      });
+				message: 'Producto no encontrado'
+			});
 		}
 		res.status(200).send(product);
 	} catch (error) {
 		res.status(500).send(error);
 	}
 };
+
 async function updateProductById(req, res) {
 	try {
+		const { id } = req.params;
+		const { name, description, price, quantity } = req.body;
 
-    const {id} = req.params;
-    const productUpdated = await Product.findByIdAndUpdate(id, req.body, {
-      new: true
-    })
-	/*
-    const { name, description, price, quantity } = req.body;
+		const updatedData = { name, description, price, quantity };
 
-		const product = await Product.findByIdAndUpdate(
-			req.params.id,
-			{ name, description, price, quantity, image },
-			{ new: true, runValidators: true }
-		);
-*/
+		if (req.files && req.files.image) {
+			const result = await uploadImage(req.files.image.tempFilePath);
+			updatedData.image = result.secure_url;
+		}
+
+		const productUpdated = await Product.findByIdAndUpdate(id, updatedData, {
+			new: true
+		});
 
 		if (!productUpdated) {
 			return res.status(404).send();
@@ -74,13 +103,14 @@ async function updateProductById(req, res) {
 		res.status(400).send(error);
 	}
 };
-async function deleteProductById(req, res){
+
+async function deleteProductById(req, res) {
 	try {
 		const product = await Product.findByIdAndDelete(req.params.id);
 		if (!product) {
 			return res.status(404).send({
-          message: 'Producto no encontrado'
-      });
+				message: 'Producto no encontrado'
+			});
 		}
 		res.status(200).send(product);
 	} catch (error) {
@@ -88,5 +118,4 @@ async function deleteProductById(req, res){
 	}
 };
 
-
-module.exports = {getAllProducts, createProduct, getProductById, updateProductById, deleteProductById }
+module.exports = { getAllProducts, createProduct, getProductById, updateProductById, deleteProductById };

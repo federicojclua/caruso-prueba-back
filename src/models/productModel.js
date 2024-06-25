@@ -3,32 +3,26 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: false,
+        required: [true, 'Es necesario un nombre'],
         trim: true
     },
     description: {
         type: String,
-        required: false,
+        required: [true, 'Es necesario una descripcion'],
         trim: true
     },
     price: {
         type: Number,
-        required: false
+        required: [true, 'Es necesario un precio']
     },
     quantity: {
         type: Number,
-        required: false
+        required: [true, 'Es necesario una cantidad']
     },
     image: {
         type: String
     },
 });
-/*
-productSchema.methods.setImgUrl = function setImgUrl(filename) { 
-    const {host, port} = indexConfig
-    this.image = `${host}:${port}/public/${filename}`
-}
-*/
 
 const Product = mongoose.model('Product', productSchema);
 
