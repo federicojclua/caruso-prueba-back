@@ -35,12 +35,15 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    console.log('Origin:', origin); // Agregar log para depuración
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      console.error('Origen no permitido por CORS:', origin); // Log de error para orígenes no permitidos
+      callback(new Error('No permitido por CORS'));
     }
-  },
+  }, //28-06
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
