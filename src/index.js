@@ -29,7 +29,7 @@ const allowedOrigins = [
   'http://localhost:4175',
   'http://localhost:4177',
   'https://caruso-futbol-club-1.onrender.com',
-  'https://caruso-prueba-back-1.onrender.com'
+  'https://caruso-prueba-back-1.onrender.com',
    
 ];
 
@@ -76,5 +76,5 @@ app.post('/webhook', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log('App corriendo en el puerto:', port);
+  console.log('App corriendo en el puerto:', port);
 });
